@@ -8,7 +8,6 @@ stages:
     - data_preprocess.test_size
     outs:
     - data/raw
-
   make_dataset:
     cmd: python src/data/make_dataset.py
     deps:
@@ -17,7 +16,6 @@ stages:
     - src/data/make_dataset.py
     outs:
     - data/processed
-
   build_features:
     cmd: python src/features/build_features.py
     deps:
@@ -28,35 +26,28 @@ stages:
     - build_features.max_features
     outs:
     - data/feature
-
   model_building:
     cmd: python src/models/model_building.py
     deps:
-    - data/feature/train_bow.csv
+    - data/feature/train_tfidf.csv
     - src/models/model_building.py
     params:
     - model_building.learning_rate
     - model_building.n_estimators
     outs:
     - models/model.pkl
-
   model_evaluation:
     cmd: python -m src.models.model_evaluation
     deps:
-    - data/feature/test_bow.csv
+    - data/feature/test_tfidf.csv
     - models/model.pkl
     - src/models/model_evaluation.py
-    params:
-    - model_evaluation.metrics_path
-    - model_evaluation.model_path
-    - model_evaluation.test_data_path
-    metrics:
-    - metrics.json
     outs:
     - reports/confusion_matrix.npy
-
+    metrics:
+    - metrics.json
   visualize:
-    cmd: python src/visualization/visualize.py
+    cmd: python -m src.visualization.visualize
     deps:
     - reports/confusion_matrix.npy
     - src/visualization/visualize.py
