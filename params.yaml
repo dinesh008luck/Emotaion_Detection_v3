@@ -1,0 +1,15 @@
+data_preprocess:
+  test_size: 0.2
+  random_state: 48
+
+build_features:
+  max_features: 5000
+
+model_building:
+  n_estimators: 300
+  learning_rate: 0.1
+
+model_evaluation:
+  model_path : models/model.pkl
+  test_data_path: data/feature/test_bow.csv
+  metrics_path: metrics.json
